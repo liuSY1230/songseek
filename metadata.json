@@ -1,0 +1,8 @@
+{
+  "name": "Copy of songseek",
+  "description": "A futuristic AI-powered search and knowledge management platform with local model integration and interactive knowledge graphs.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
