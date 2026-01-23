@@ -1,72 +1,58 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNav: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const tabs = [
-    { id: 'search', path: '/', label: '探索', icon: 'search' },
-    { id: 'knowledge', path: '/knowledge-base', label: '知识库', icon: 'auto_stories' },
-    { id: 'database', path: '/database', label: '数据库', icon: 'database' },
-    { id: 'model', path: '/model-manager', label: '模型库', icon: 'robot_2' },
-    { id: 'settings', path: '/settings', label: '控制台', icon: 'settings' },
-  ];
+  const tabs = useMemo(() => [
+    { id: 'search', path: '/', label: '探索', code: 'ex', icon: 'explore' },
+    { id: 'knowledge', path: '/knowledge-base', label: '知识', code: 'au', icon: 'library_books' },
+    { id: 'database', path: '/database', label: '存储', code: 'da', icon: 'database' },
+    { id: 'model', path: '/model-manager', label: '引擎', code: 'm', icon: 'memory' },
+    { id: 'settings', path: '/settings', label: '控制', code: 'se', icon: 'settings' },
+  ], []);
+
+  const activeIndex = tabs.findIndex(tab => 
+    location.pathname === tab.path || (tab.path !== '/' && location.pathname.startsWith(tab.path))
+  );
 
   return (
-    <nav className="fixed bottom-6 left-5 right-5 z-50 pointer-events-none flex justify-center">
-      <div className="glass-panel rounded-[32px] h-[84px] px-2 flex items-center justify-around w-full max-w-lg pointer-events-auto relative overflow-hidden">
-        
-        {/* Subtle interior lighting */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.1] to-transparent pointer-events-none dark:from-white/[0.02]"></div>
-
-        {tabs.map((tab) => {
-          const isActive = location.pathname === tab.path || (tab.path !== '/' && location.pathname.startsWith(tab.path));
+    <nav className="fixed bottom-0 left-0 right-0 z-[100] px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-4 bg-gradient-to-t from-background-base via-background-base/80 to-transparent pointer-events-none">
+      <div className="glass-panel h-20 px-2 flex items-center justify-around bg-slate-900/90 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-[32px] overflow-hidden pointer-events-auto max-w-xl mx-auto">
+        {tabs.map((tab, idx) => {
+          const isActive = activeIndex === idx;
           
           return (
             <button
               key={tab.id}
               onClick={() => navigate(tab.path)}
-              className={`relative flex flex-col items-center justify-center h-full flex-1 transition-all duration-500 group outline-none`}
+              className="relative flex flex-col items-center justify-center flex-1 h-full active:scale-90 transition-all outline-none group"
             >
-              {/* Active Back-Glow */}
+              {/* 激活态背景发光 */}
               {isActive && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-14 h-14 bg-primary/10 blur-[20px] rounded-full animate-pulse-soft"></div>
-                  <div className="w-8 h-8 bg-primary/5 blur-md rounded-full"></div>
-                </div>
+                <div className="absolute inset-x-2 inset-y-2 bg-primary/10 blur-xl rounded-full animate-pulse"></div>
               )}
-
-              {/* Icon Container */}
-              <div className={`relative mb-1 flex items-center justify-center transition-all duration-500 ease-out ${
-                isActive ? '-translate-y-1.5 scale-110' : 'group-hover:translate-y-[-2px]'
-              }`}>
-                <span 
-                  className={`material-symbols-outlined text-[28px] transition-all duration-500 ${
-                    isActive ? 'text-primary drop-shadow-[0_0_8px_rgba(180,83,9,0.3)]' : 'text-slate-400 dark:text-slate-500'
-                  }`}
-                  style={{
-                    fontVariationSettings: isActive 
-                      ? "'FILL' 1, 'wght' 700, 'opsz' 48, 'GRAD' 200" 
-                      : "'FILL' 0, 'wght' 300, 'opsz' 48, 'GRAD' 0"
-                  }}
-                >
+              
+              <div className={`flex flex-col items-center transition-all duration-300 ${isActive ? 'translate-y-[-2px]' : 'opacity-40 grayscale group-hover:opacity-70 group-hover:grayscale-0'}`}>
+                {/* 图标层 */}
+                <span className={`material-symbols-outlined text-[22px] mb-1 ${isActive ? 'text-primary' : 'text-slate-300'}`}>
                   {tab.icon}
                 </span>
-
-                {/* Vertical Light Indicator */}
-                {isActive && (
-                  <div className="absolute -bottom-2.5 w-6 h-[4px] bg-primary rounded-full shadow-[0_2px_10px_rgba(180,83,9,0.4)] animate-in zoom-in-50 duration-300"></div>
-                )}
+                
+                {/* 文字层：结合双字母代码和中文标题 */}
+                <div className="flex flex-col items-center">
+                  <span className={`text-[10px] font-black tracking-widest ${isActive ? 'text-primary' : 'text-slate-400'}`}>
+                    {isActive ? tab.label : tab.code.toUpperCase()}
+                  </span>
+                </div>
               </div>
-
-              {/* Label */}
-              <span className={`text-[10px] uppercase tracking-[0.2em] font-black transition-all duration-500 ${
-                isActive ? 'text-primary opacity-100' : 'text-slate-400 dark:text-slate-500 opacity-60 scale-90'
-              }`}>
-                {tab.label}
-              </span>
+              
+              {/* 底部指示条 */}
+              {isActive && (
+                <div className="absolute bottom-2 w-6 h-[3px] bg-primary shadow-[0_0_12px_var(--primary)] rounded-full animate-in zoom-in duration-300"></div>
+              )}
             </button>
           );
         })}
@@ -75,4 +61,4 @@ const BottomNav: React.FC = () => {
   );
 };
 
-export default BottomNav;
+export default React.memo(BottomNav);

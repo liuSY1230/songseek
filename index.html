@@ -3,10 +3,15 @@
 <html lang="zh-CN" class="dark">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>songseek</title>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>songseek Nebula</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&family=Noto+Sans+SC:wght@100;300;400;500;700;900&family=Space+Grotesk:wght@300;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -14,116 +19,95 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "var(--primary-color)",
-                        "primary-light": "var(--primary-light)",
-                        "background-base": "var(--bg-base)",
-                        "glass-border": "var(--glass-border)",
+                        "primary": "#00d9e6",
+                        "primary-warm": "#ff5722",
+                        "background-base": "var(--bg)",
                     },
                     fontFamily: {
-                        "display": ["Manrope", "Noto Sans SC", "sans-serif"],
-                        "graph": ["Space Grotesk", "sans-serif"]
+                        "display": ["Manrope", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "sans-serif"],
+                        "tech": ["Space Grotesk", "monospace"]
                     },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-soft': 'pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'shimmer-fast': 'shimmer 1.5s infinite linear',
-                        'orbit': 'orbit 20s linear infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        'pulse-soft': {
-                            '0%, 100%': { opacity: 0.4 },
-                            '50%': { opacity: 0.7 },
-                        },
-                        orbit: {
-                            'from': { transform: 'rotate(0deg) translateX(10px) rotate(0deg)' },
-                            'to': { transform: 'rotate(360deg) translateX(10px) rotate(-360deg)' }
-                        }
-                    }
                 }
             }
         }
     </script>
     <style>
         :root {
-            /* Dark Theme Variables (Deep Sea) */
-            --primary-color: #006c75;
-            --primary-light: #00E3F3;
-            --bg-base: #111418;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --input-bg: rgba(30, 36, 44, 0.4);
-            --card-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            --primary: #00d9e6;
+            --bg: #0a0c10;
+            --text: #f0f4f8;
+            --aura-1: #162a35;
+            --aura-2: #0d1e26;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
         }
 
-        .light {
-            /* Amber Morning Light Theme Variables - Refined */
-            --primary-color: #b45309;
-            --primary-light: #f59e0b;
-            --bg-base: #fdfcfb;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(180, 83, 9, 0.12);
-            --text-main: #2d241e;
-            --text-dim: #7c726a;
-            --input-bg: #f5f2ee;
-            --card-shadow: 0 12px 30px -8px rgba(180, 83, 9, 0.08), 0 4px 10px -4px rgba(0,0,0,0.04);
+        html.light {
+            --bg: #fffcf5;
+            --text: #3a1000;
+            --aura-1: #ffa500;
+            --aura-2: #ff5722;
         }
 
         body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            font-family: 'Manrope', 'Noto Sans SC', sans-serif;
-            overflow-x: hidden;
-            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s ease;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Manrope', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            overscroll-behavior: none;
+            padding-top: var(--safe-top);
+        }
+
+        /* 全面屏蔽焦点白框和点击高亮 */
+        *:focus, *:active, *:focus-visible, *:focus-within {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        input, textarea, button, a {
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none !important;
+        }
+
+        #nebula-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.45;
+        }
+
+        .nebula-aura {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: radial-gradient(circle at 60% -10%, var(--aura-1) 0%, transparent 80%),
+                        radial-gradient(circle at -5% 105%, var(--aura-2) 0%, transparent 75%);
+            opacity: 0.85;
+            pointer-events: none;
         }
 
         .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--card-shadow);
-            transition: all 0.5s ease;
+            background: rgba(18, 22, 28, 0.7);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .light .glass-panel {
-            box-shadow: var(--card-shadow);
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none !important; }
+        .no-scrollbar { -ms-overflow-style: none !important; scrollbar-width: none !important; }
 
-        .glass-input {
-            background: var(--input-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            transition: all 0.3s ease;
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .light .glass-input:focus-within {
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.05);
-            border-color: var(--primary-color);
-        }
-
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .animate-fade-up { animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        .theme-transitioning * {
-            transition: background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease, box-shadow 0.6s ease !important;
-        }
-
-        /* Ambient background spots for light mode */
-        .light .ambient-glow {
-            background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
-        }
+        .letter-spacing-tight { letter-spacing: -0.02em; }
     </style>
 <script type="importmap">
 {
@@ -131,13 +115,65 @@
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
     "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
+    "react": "https://esm.sh/react@^19.2.3/",
     "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0"
   }
 }
 </script>
 </head>
 <body>
+    <div class="nebula-aura"></div>
+    <canvas id="nebula-canvas"></canvas>
     <div id="root"></div>
+
+    <script>
+        const canvas = document.getElementById('nebula-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const count = Math.min(Math.floor(window.innerWidth / 15), 100);
+            for(let i=0; i<count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5 + 0.1,
+                    vx: (Math.random() - 0.5) * 0.2,
+                    vy: (Math.random() - 0.5) * 0.2,
+                    opacity: Math.random() * 0.4 + 0.1,
+                    pulse: Math.random() * 0.01 + 0.005,
+                    pState: 0
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.pState += p.pulse;
+                
+                if(p.x < 0) p.x = canvas.width;
+                if(p.x > canvas.width) p.x = 0;
+                if(p.y < 0) p.y = canvas.height;
+                if(p.y > canvas.height) p.y = 0;
+                
+                const alpha = p.opacity * (0.6 + Math.sin(p.pState) * 0.4);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 217, 230, ${alpha})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        animate();
+    </script>
 </body>
 </html>

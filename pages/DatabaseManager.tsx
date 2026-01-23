@@ -60,7 +60,7 @@ const DatabaseManager: React.FC = () => {
           <StatCard label="总条目" value="4.2M" subValue="今日新增 1.2k" icon="view_list" />
           <StatCard label="实时吞吐" value="458" subValue="运行平稳" icon="show_chart" />
           <StatCard label="活跃连接" value={connections.toString()} subValue="峰值 56" icon="cable" />
-          <StatCard label="存储加密" value="已开启" subValue="企业级" icon="verified_user" />
+          <StatCard label="存储加密" value="已开启" subValue="物理加密" icon="verified_user" />
         </section>
 
         <section className="glass-panel rounded-[32px] p-6 border-primary/5 shadow-xl group">
@@ -106,8 +106,8 @@ const DatabaseManager: React.FC = () => {
                    <h3 className="font-black text-sm">检测到 2 条慢查询记录</h3>
                 </div>
                 <div className="space-y-3">
-                   <QueryItem sql="SELECT * FROM massive_data JOIN meta..." time="450ms" />
-                   <QueryItem sql="UPDATE knowledge_vectors SET cluster..." time="1.2s" />
+                   <QueryItem sql="SELECT * FROM massive_data JOIN meta..." time="450毫秒" />
+                   <QueryItem sql="UPDATE knowledge_vectors SET cluster..." time="1.2秒" />
                 </div>
              </div>
              <button className="w-full py-4 glass-panel text-xs font-black uppercase tracking-widest text-primary hover:bg-primary/10 transition-all">一键重构索引优化性能</button>
